@@ -186,6 +186,7 @@ function install_memcached {
 function pre_install {
   apt-get update
   apt-get install sysv-rc-conf -y
+  apt-get install ntp -y
 }
 
 function install_server {
