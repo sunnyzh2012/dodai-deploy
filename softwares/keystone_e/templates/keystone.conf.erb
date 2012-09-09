@@ -17,7 +17,7 @@ use_syslog = False
 # syslog_log_facility = LOG_LOCAL0
 
 [sql]
-connection = sqlite:////var/lib/keystone/keystone.db
+connection = mysql://keystonedbadmin:keystonesecret@<%= mysql %>/keystone
 idle_timeout = 200
 
 [ldap]

@@ -16,7 +16,7 @@
 --glance_api_servers=<%= glance %>:9292
 --image_service=nova.image.glance.GlanceImageService
 --iscsi_ip_prefix=192.168.22
---sql_connection=mysql://root:nova@<%= mysql %>/nova
+--sql_connection=mysql://novadbadmin:novasecret@<%= mysql %>/nova
 --ec2_url=http://<%= nova_api %>:8773/services/Cloud
 --keystone_ec2_url=http://<%= keystone %>:5000/v2.0/ec2tokens
 --api_paste_config=/etc/nova/api-paste.ini
