@@ -2,7 +2,6 @@
 
 cd `dirname $0`
 home_path=`pwd`
-HOSTNAME_SERVER=ubuntu1
 
 function install {
   target=$1
@@ -199,12 +198,6 @@ function install_server {
   sed -i '26i server 127.127.1.0' /etc/ntp.conf
   sed -i '27i fudge 127.127.1.0 stratum 10' /etc/ntp.conf
 
-  # get the hostname of server/controller
- # while read line
- # do
- #    $HOSTNAME_SERVER=$line
- # done < /etc/hostname
-
   soft="$1"
   if [ "$soft" != "" ]; then
     install $soft
@@ -219,10 +212,17 @@ function install_server {
 function install_node {
   pre_install
 
-  # configure ntp on client side
-  rm -f /etc/ntp.conf
-  cp ntp/ntp.conf /etc/
-  sed -i '19i server $HOSTNAME_SERVER' /etc/ntp.conf
+  # get the hostname of server/controller
+  while read line
+  do
+      HOSTNAME_SERVER=$line
+  done < /etc/hostname
+  if [ $HOSTNAME_SERVER != "ubuntu1" ]; then
+      # configure ntp on client side
+      rm -f /etc/ntp.conf
+      cp ntp/ntp.conf /etc/
+      sed -i '19i server ubuntu1' /etc/ntp.conf
+  fi
 
   soft="$1"
   if [ "$soft" != "" ]; then

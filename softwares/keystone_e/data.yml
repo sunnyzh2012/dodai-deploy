@@ -16,7 +16,7 @@ config_item_defaults:
   - name: admin_password 
     value: admin
   - name: admin_email
-    value: admin@nii.ac.jp
+    value: admin@cienet.com.cn
   - name: nova_api 
     value: localhost
   - name: glance
