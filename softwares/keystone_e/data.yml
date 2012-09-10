@@ -1,6 +1,7 @@
 description: openstack essex keystone
 
 components:
+  - name: mysql
   - name: keystone
 
 component_dependencies:

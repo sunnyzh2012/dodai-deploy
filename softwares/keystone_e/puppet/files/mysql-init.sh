@@ -16,38 +16,27 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-#confirm if db keystone exists.
-mysql -uroot -popenstack -e "use keystone"
-if [ $? = 0 ]; then
-    echo "db keystone existed."
-    exit 0
-fi
+MYSQL_PASS=openstack
 
 sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/my.cnf
 service mysql restart
 
-mysql -uroot -popenstack -e "CREATE DATABASE keystone;"
-mysql -uroot -popenstack -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+USER_SUFFIX=dbadmin
+PWD_SUFFIX=secret
+for D in keystone glance nova
+do
+    #confirm if db $D exists.
+    mysql -uroot -p$MYSQL_PASS -e "use $D"
+    if [ $? = 0 ]; then
+        echo "db $D existed."
+        exit 0
+    fi
 
-#confirm if db glance exists.
-mysql -uroot -popenstack -e "use glance"
-if [ $? = 0 ]; then
-    echo "db glance existed."
-    exit 0
-fi
-
-mysql -uroot -popenstack -e "CREATE DATABASE glance;"
-mysql -uroot -popenstack -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-
-#confirm if db nova exists.
-mysql -uroot -popenstack -e "use nova"
-if [ $? = 0 ]; then
-    echo "db nova existed."
-    exit 0
-fi
-
-mysql -uroot -popenstack -e "CREATE DATABASE nova;"
-mysql -uroot -popenstack -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-mysql -uroot -popenstack -e "SET PASSWORD FOR 'root'@'%' = PASSWORD('openstack');"
+    # Create Database if not exists.
+    mysql -uroot -p$MYSQL_PASS -e "CREATE DATABASE $D;"
+    mysql -uroot -p$MYSQL_PASS -e "CREATE USER ${D}${USER_SUFFIX}"
+    mysql -uroot -p$MYSQL_PASS -e "GRANT ALL PRIVILEGES ON $D.* TO '${D}${USER_SUFFIX}'@'%' WITH GRANT OPTION;"
+    mysql -uroot -p$MYSQL_PASS -e "SET PASSWORD FOR '${D}${USER_SUFFIX}'@'%' = PASSWORD('${D}${PWD_SUFFIX}');"
+done
 
 echo "finished"

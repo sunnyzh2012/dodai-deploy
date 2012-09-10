@@ -1,11 +1,11 @@
-class nova_e::mysql::install {
+class keystone_e::mysql::install {
     file {
         "/var/lib/mysql-preseed.sh":
             alias => "mysql-preseed.sh",
-            source => "puppet:///modules/nova_e/mysql-preseed.sh";
+            source => "puppet:///modules/keystone_e/mysql-preseed.sh";
         "/var/lib/mysql-init.sh":
             alias => "mysql-init.sh",
-            source => "puppet:///modules/nova_e/mysql-init.sh";
+            source => "puppet:///modules/keystone_e/mysql-init.sh";
     }
 
     exec {
@@ -20,7 +20,9 @@ class nova_e::mysql::install {
     package {
         mysql-server:
             require => Exec["mysql-preseed.sh"],
-            notify => [Service[mysql]]
+            notify => [Service[mysql]];
+        python-mysqldb:
+            ensure => installed;
     }
 
     service {

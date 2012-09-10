@@ -4,6 +4,10 @@ class keystone_e::keystone::install {
     }
 
     file {
+        "/var/lib/keystone/keystone-db-init.sh":
+            source => "puppet:///modules/keystone_e/keystone-db-init.sh",
+            alias => "keystone-db-init.sh";
+
         "/etc/keystone/keystone.conf":
             content => template("$proposal_id/etc/keystone/keystone.conf.erb"),
             mode => 644,
@@ -22,6 +26,9 @@ class keystone_e::keystone::install {
     }
 
     exec {
+        "stop keystone; start keystone":
+            require => Exec["keystone-db-init.sh"];
+
         "stop keystone; start keystone; sleep 5":
             alias => "restart_keystone",
             require => File["keystone", "default_catalog"];

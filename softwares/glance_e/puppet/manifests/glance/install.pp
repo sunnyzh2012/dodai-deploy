@@ -27,9 +27,16 @@ class glance_e::glance::install {
             mode => 644,
             alias => "glance-registry-paste",
             require => Package[glance];
+
+        "/var/lib/glance/glance-db-init.sh":
+            source => "puppet:///modules/glance_e/glance-db-init.sh",
+            alias => "glance-db-init.sh";
     }
 
     exec {
+        "/var/lib/glance/glance-db-init.sh":
+            require => File["/var/lib/glance/glance-db-init.sh"];
+
         "stop glance-api; stop glance-registry; start glance-api; start glance-registry":
              require => [File["glance-api", "glance-registry", "glance-api-paste", "glance-registry-paste"], Package[python-swift]];
     }
