@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+# Check we're running as root
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root!"
+    exit 1
+fi
+
 cd `dirname $0`
 home_path=`pwd`
 
@@ -217,11 +224,11 @@ function install_node {
   do
       HOSTNAME_SERVER=$line
   done < /etc/hostname
-  if [ $HOSTNAME_SERVER != "ubuntu1" ]; then
+  if [ $HOSTNAME_SERVER != "ubuntu1.cienet.com.cn" ]; then
       # configure ntp on client side
       rm -f /etc/ntp.conf
       cp ntp/ntp.conf /etc/
-      sed -i '19i server ubuntu1' /etc/ntp.conf
+      sed -i '19i server ubuntu1.cienet.com.cn' /etc/ntp.conf
   fi
 
   soft="$1"

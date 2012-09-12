@@ -26,17 +26,16 @@ PWD_SUFFIX=secret
 for D in keystone glance nova
 do
     #confirm if db $D exists.
-    mysql -uroot -p$MYSQL_PASS -e "use $D"
-    if [ $? = 0 ]; then
+    mysql -uroot -p$MYSQL_PASS -e "use $D;"
+    if [ $? != 0 ]; then
+        # Create Database if not exists.
+        mysql -uroot -p$MYSQL_PASS -e "CREATE DATABASE $D;"
+        mysql -uroot -p$MYSQL_PASS -e "CREATE USER ${D}${USER_SUFFIX};"
+        mysql -uroot -p$MYSQL_PASS -e "GRANT ALL PRIVILEGES ON $D.* TO '${D}${USER_SUFFIX}'@'%' WITH GRANT OPTION;"
+        mysql -uroot -p$MYSQL_PASS -e "SET PASSWORD FOR '${D}${USER_SUFFIX}'@'%' = PASSWORD('${D}${PWD_SUFFIX}');"
+    else
         echo "db $D existed."
-        exit 0
     fi
-
-    # Create Database if not exists.
-    mysql -uroot -p$MYSQL_PASS -e "CREATE DATABASE $D;"
-    mysql -uroot -p$MYSQL_PASS -e "CREATE USER ${D}${USER_SUFFIX}"
-    mysql -uroot -p$MYSQL_PASS -e "GRANT ALL PRIVILEGES ON $D.* TO '${D}${USER_SUFFIX}'@'%' WITH GRANT OPTION;"
-    mysql -uroot -p$MYSQL_PASS -e "SET PASSWORD FOR '${D}${USER_SUFFIX}'@'%' = PASSWORD('${D}${PWD_SUFFIX}');"
 done
 
 echo "finished"

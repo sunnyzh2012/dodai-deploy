@@ -10,7 +10,6 @@ components:
   - name: nova_cert
   - name: novnc
   - name: rabbitmq
-  - name: mysql
   - name: dashboard
 
 component_dependencies:

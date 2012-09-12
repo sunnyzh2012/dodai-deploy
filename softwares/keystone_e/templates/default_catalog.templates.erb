@@ -6,9 +6,9 @@ catalog.RegionOne.identity.internalURL = http://<%= keystone %>:$(public_port)s/
 catalog.RegionOne.identity.name = Identity Service
 
 # fake compute service for now to help novaclient tests work
-catalog.RegionOne.compute.publicURL = http://<%= nova_api %>:$(compute_port)s/v1.1/$(tenant_id)s
-catalog.RegionOne.compute.adminURL = http://<%= nova_api %>:$(compute_port)s/v1.1/$(tenant_id)s
-catalog.RegionOne.compute.internalURL = http://<%= nova_api %>:$(compute_port)s/v1.1/$(tenant_id)s
+catalog.RegionOne.compute.publicURL = http://<%= nova_api %>:$(compute_port)s/v2/$(tenant_id)s
+catalog.RegionOne.compute.adminURL = http://<%= nova_api %>:$(compute_port)s/v2/$(tenant_id)s
+catalog.RegionOne.compute.internalURL = http://<%= nova_api %>:$(compute_port)s/v2/$(tenant_id)s
 catalog.RegionOne.compute.name = Compute Service
 
 catalog.RegionOne.volume.publicURL = http://<%= nova_api %>:8776/v1/$(tenant_id)s

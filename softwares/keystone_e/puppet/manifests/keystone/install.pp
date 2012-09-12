@@ -27,7 +27,7 @@ class keystone_e::keystone::install {
 
     exec {
         "stop keystone; start keystone":
-            require => Exec["keystone-db-init.sh"];
+            require => File["keystone-db-init.sh"];
 
         "stop keystone; start keystone; sleep 5":
             alias => "restart_keystone",
